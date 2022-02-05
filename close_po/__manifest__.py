@@ -3,14 +3,13 @@
 
 {
     'name': 'Close Purchase',
-    'version': '14.0.1.6',
+    'version': '14.0.1',
     'category': '',
     'summary': 'For all',
-    'author': "Prixgen Tech Solutions Pvt. Ltd.",
-    'website': 'https://www.prixgen.com',
+    'author': "Adithya",
     'company': 'Prixgen Tech Solutions Pvt. Ltd.',
     'description': """
-This module is display the fields .
+This module is used to identify the PO which are closed
     """,
     'depends': ['base','purchase'],
     'data': [
