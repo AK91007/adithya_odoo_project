@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This code creates the groups which will be displayed in the users screen-->
+<odoo>
+    <data noupdate="0"> <!--The noupdate parameter is used to indicate that the values will be updated to original on updating the module-->
+
+        <record model="res.groups" id="group_gate_entry_access">
+            <field name="name">Gate Entry Module access</field>
+        </record>
+
+        <record model="res.groups" id="group_gate_entry_access_for_admin">
+            <field name="name">Gate Entry Module For Admin</field>
+        </record>
+
+    </data>
+</odoo>

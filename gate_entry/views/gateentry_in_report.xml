@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Paper Format -->
+        <record id="gateentry_in_rec" model="report.paperformat">
+            <field name="name">Gate Entry In Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A5</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">22</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="gateentry_in_id" model="ir.actions.report">
+            <field name="name">Gate Pass</field>
+            <field name="model">gate.entry</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">gate_entry.gateentry_in_temp</field>
+            <field name="report_file">gate_entry.gateentry_in_temp</field>
+            <field name="print_report_name">(object.state in ('draft','processed') and 'Gate Entry IN - %s (NTB)' % (object.name)) or 'Gate Entry IN - %s (NTB)' % (object.name)</field>
+            <field name="binding_model_id" ref="gate_entry.model_gate_entry"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="gate_entry.gateentry_in_rec"/>
+        </record>
+    
+       
+        <template id="gateentry_in_temp">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-if="not o and doc">
+                        <t t-set="o" t-value="doc"/>
+                    </t>
+                    <t t-if="o and 'company_id' in o">
+                        <t t-set="company" t-value="o.company_id.sudo()"/>
+                    </t>
+                    <t t-if="not o or not 'company_id' in o">
+                        <t t-set="company" t-value="res_company"/>
+                    </t>
+                    <t t-call="gate_entry.external_layout_for_headerfooter_ge">
+                   
+                    <div class="page">
+                    <table class="table" style="width:100%;font-size: 15px;border:1px dotted black;font-family: calibri;">
+                        <thead>
+                        <tr>
+                            <td class="text-center" colspan="3" style="font-size:20px;border:1px dotted black !important;">
+                                <Strong><span>Check In Pass</span></Strong>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td colspan="2" style="border:1px dotted black !important;color: black;width:50%;">
+                                    <Strong><span>Check In Ref:  </span></Strong><span t-esc="o.name"/><br/>
+                                    <!-- <Strong><span>Gate Pass Type:</span></Strong><span t-esc="o.value"/><br/> -->
+                                    <!-- <Strong><span>Station From:</span></Strong><span t-esc="o.warehouse_id.name"/><br/> -->
+                                    <Strong><span>Manual Date:  </span></Strong><span t-esc="o.doc_datetime.strftime('%d-%m- %Y')"/><br/>
+                                    <Strong><span>System Date:  </span></Strong><span t-esc="o.post_datetime.strftime('%d-%m-%Y')"/><br/>
+                                    <Strong><span>Visitor Name:  </span></Strong><span t-esc="o.visitorname"/><br/>
+                                </td>
+                                <td  style="border:1px dotted black !important;color: black;width:50%;">
+                                    <Strong><span>Vehicle No:  </span></Strong><span t-esc="o.external_vehicle_no"/><br/>
+                                   <Strong><span>Description:  </span></Strong><span t-esc="o.description"/><br/>
+                                    <Strong><span>Manual Time:  </span></Strong> <span t-esc="o.doc_datetime.strftime('%H:%M:%S')"/><br/>
+                                    <Strong><span>System Time:  </span></Strong> <span t-esc="o.post_datetime.strftime('%H:%M:%S')"/><br/>
+                                </td>
+                            </tr>
+                        </thead>
+                            <thead style="color:black;">
+                                <tr>
+                                    <th class="text-center" style="border:1px dotted black;vertical-align:middle;width:25%">Challan Reference</th>
+                                    <th class="text-center" style="border:1px dotted black;vertical-align:middle;width:25%;">Transaction</th>
+                                    <th class="text-center" style="border:1px dotted black;vertical-align:middle;width:50%">Shipment Details</th>
+                                </tr>
+                            </thead> 
+                           <tbody>
+                                <tr t-foreach="o.gate_line" t-as="line">
+                                    <td  class="text-left" style="border:1px dotted black;width:25%">
+                                        <span t-field="line.challan_no"/>
+                                    </td>
+                                    <td  class="text-left" style="border:1px dotted black;width:25%">
+                                        <span t-field="line.order_type_inward"/>
+                                    </td>
+                                    <td  class="text-left" style="border:1px dotted black;width:50%">
+                                        <span t-field="line.description"/>
+                                    </td>
+                                </tr>
+                            <tr>
+                                    
+                                    <td colspan="2" style="border:1px dotted black;width:50%">
+                                        <b>Checked By:  </b><strong><span t-esc="o.username.username"/></strong>
+                                    </td>
+                                    <td class="text-left" style="border:1px dotted black;border-left:none !important;width:50%">
+                                        <b>Authority In-Charge:</b>
+                                    </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    </data>
+</odoo>  
